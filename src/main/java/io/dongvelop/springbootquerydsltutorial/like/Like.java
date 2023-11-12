@@ -6,9 +6,11 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
+@ToString
 @Table(name = "likes")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Like {

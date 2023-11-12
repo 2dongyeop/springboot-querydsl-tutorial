@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board {
 
@@ -47,5 +49,9 @@ public class Board {
     private void setMember(final Member member) {
         this.member = member;
         member.getBoards().add(this);
+    }
+
+    public void increaseView() {
+        this.views++;
     }
 }
