@@ -13,6 +13,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @Transactional(readOnly = true)
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final BoardQueryRepository boardQueryRepository;
     private final AuthenticationUtil authenticationUtil;
 
     public Long registerBoard(final RegisterBoardRequest registerBoardRequest) {
@@ -53,19 +56,19 @@ public class BoardService {
         );
     }
 
-    public Slice<BoardListResponse> readBoardList(final SortType sortType, final Pageable pageable) {
+    public List<BoardListResponse> readBoardList(final SortType sortType, final Pageable pageable) {
 
         log.info("sortType[{}]", sortType);
 
-        final Slice<Board> boardSlice = sort(sortType, pageable);
-
-        return boardSlice.map(board -> new BoardListResponse(
-                board.getId(),
-                board.getTitle(),
-                board.getViews(),
-                board.getLikes().size(),
-                board.getCreatedAt()
-        ));
+        return boardQueryRepository.getBoardList(pageable)
+                .stream()
+                .map(board -> new BoardListResponse(
+                        board.getId(),
+                        board.getTitle(),
+                        board.getViews(),
+                        board.getLikes().size(),
+                        board.getCreatedAt()))
+                .toList();
     }
 
     private Slice<Board> sort(final SortType sortType, final Pageable pageable) {
