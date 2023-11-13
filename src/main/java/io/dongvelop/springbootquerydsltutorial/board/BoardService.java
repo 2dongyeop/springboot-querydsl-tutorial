@@ -60,7 +60,7 @@ public class BoardService {
 
         log.info("sortType[{}]", sortType);
 
-        return boardQueryRepository.getBoardList(pageable)
+        return boardQueryRepository.getBoardList(pageable, sortType)
                 .stream()
                 .map(board -> new BoardListResponse(
                         board.getId(),

@@ -1,2 +1,2 @@
-GET localhost:8080/boards
+GET localhost:8080/boards?sortBy=VIEWS
 Accept: application/json
