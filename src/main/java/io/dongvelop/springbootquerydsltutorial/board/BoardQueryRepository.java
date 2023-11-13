@@ -9,6 +9,8 @@ import io.dongvelop.springbootquerydsltutorial.common.SortType;
 import io.dongvelop.springbootquerydsltutorial.like.QLike;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,7 +21,7 @@ public class BoardQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<BoardListResponse> getBoardList(final Pageable pageable, final SortType sortType) {
+    public Slice<BoardListResponse> getBoardList(final Pageable pageable, final SortType sortType) {
 
         final QBoard board = QBoard.board;
         final QLike like = QLike.like;
@@ -35,7 +37,7 @@ public class BoardQueryRepository {
                         board.createdAt
                 );
 
-        return queryFactory
+        final List<BoardListResponse> result = queryFactory
                 .query()
                 .select(boardListResponse)
                 .from(board)
@@ -44,8 +46,16 @@ public class BoardQueryRepository {
                 .groupBy(board.id)
                 .orderBy(ordering(board, like, sortType)) // 집계함수 사용했으니 그룹바이~
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
+
+        boolean hasNext = false;
+        if (result.size() > pageable.getPageSize()) {
+            result.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+
+        return new SliceImpl<>(result, pageable, hasNext);
     }
 
     private OrderSpecifier<?> ordering(final QBoard board, final QLike like, final SortType sortType) {

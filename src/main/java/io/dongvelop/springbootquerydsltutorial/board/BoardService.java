@@ -56,7 +56,7 @@ public class BoardService {
         );
     }
 
-    public List<BoardListResponse> readBoardList(final SortType sortType, final Pageable pageable) {
+    public Slice<BoardListResponse> readBoardList(final SortType sortType, final Pageable pageable) {
 
         log.info("sortType[{}]", sortType);
 

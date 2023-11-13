@@ -14,8 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Slf4j
 @RestController
 @RequestMapping("/boards")
@@ -42,7 +40,7 @@ public class BoardEndpoint {
     }
 
     @GetMapping
-    public ResponseEntity<List<BoardListResponse>> readBoardList(@RequestParam(defaultValue = "default") final String sortBy,
+    public ResponseEntity<Slice<BoardListResponse>> readBoardList(@RequestParam(defaultValue = "default") final String sortBy,
                                                                  @PageableDefault(size = 3) final Pageable pageable) {
 
         log.info("sortBy[{}]", sortBy);
