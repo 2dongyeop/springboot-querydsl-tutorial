@@ -7,7 +7,7 @@ public record BoardListResponse(
         Long id,
         String title,
         Long views,
-        int likeCount,
+        Long likeCount,
         LocalDateTime createdAt
 ) {
 }

@@ -60,15 +60,7 @@ public class BoardService {
 
         log.info("sortType[{}]", sortType);
 
-        return boardQueryRepository.getBoardList(pageable, sortType)
-                .stream()
-                .map(board -> new BoardListResponse(
-                        board.getId(),
-                        board.getTitle(),
-                        board.getViews(),
-                        board.getLikes().size(),
-                        board.getCreatedAt()))
-                .toList();
+        return boardQueryRepository.getBoardList(pageable, sortType);
     }
 
     private Slice<Board> sort(final SortType sortType, final Pageable pageable) {
